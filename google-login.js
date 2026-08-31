@@ -1,27 +1,28 @@
+// Belajar otomasi Chromium: login Google (Playwright)
+// Install dulu: npm i playwright
+// Siapkan file.txt di folder yang sama, isinya satu baris: email:password
+// Jalankan: node google-login.js
+
 const fs = require("fs");
 const path = require("path");
 const { chromium } = require("playwright");
 
-function loadEnvFile(file) {
-  if (!fs.existsSync(file)) return;
-  for (const line of fs.readFileSync(file, "utf8").split("\n")) {
-    const match = line.match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/);
-    if (match && !(match[1] in process.env)) {
-      process.env[match[1]] = match[2] ?? "";
-    }
-  }
-}
-
-loadEnvFile(path.join(__dirname, ".env"));
-
-const EMAIL = process.env.GOOGLE_EMAIL;
-const PASSWORD = process.env.GOOGLE_PASSWORD;
-const HEADLESS = process.env.HEADLESS !== "false";
-
-if (!EMAIL || !PASSWORD) {
-  console.error("Isi GOOGLE_EMAIL dan GOOGLE_PASSWORD di file .env (contoh: .env.example).");
+const credsFile = path.join(__dirname, "file.txt");
+if (!fs.existsSync(credsFile)) {
+  console.error("File file.txt tidak ditemukan. Isi dengan format email:password");
   process.exit(1);
 }
+
+const line = fs.readFileSync(credsFile, "utf8").trim().split("\n")[0];
+const sep = line.indexOf(":");
+if (sep === -1) {
+  console.error("Format file.txt salah. Harus email:password");
+  process.exit(1);
+}
+
+const EMAIL = line.slice(0, sep).trim();
+const PASSWORD = line.slice(sep + 1).trim();
+const HEADLESS = process.env.HEADLESS !== "false";
 
 async function main() {
   const browser = await chromium.launch({ headless: HEADLESS });
