@@ -1,0 +1,12 @@
+{
+  "name": "chromium-google-login-demo",
+  "version": "1.0.0",
+  "description": "Script belajar otomasi Chromium: login ke Google pakai Playwright",
+  "main": "login.js",
+  "scripts": {
+    "login": "node login.js"
+  },
+  "dependencies": {
+    "playwright": "1.56.1"
+  }
+}
