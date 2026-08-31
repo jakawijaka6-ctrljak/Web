@@ -34,7 +34,8 @@ async function main() {
   console.log("Judul halaman:", await page.title());
   await page.screenshot({ path: "debug-sebelum-isi-email.png" });
 
-  await page.fill('input[type="email"]', EMAIL);
+  await page.waitForSelector("#identifierId", { state: "visible" });
+  await page.fill("#identifierId", EMAIL);
   await page.click("#identifierNext");
 
   await page.waitForSelector('input[type="password"]', { state: "visible" });
