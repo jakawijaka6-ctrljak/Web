@@ -38,8 +38,14 @@ async function main() {
   await page.fill("#identifierId", EMAIL);
   await page.click("#identifierNext");
 
-  await page.waitForSelector('input[type="password"]', { state: "visible" });
-  await page.fill('input[type="password"]', PASSWORD);
+  await page.waitForLoadState("domcontentloaded");
+  console.log("URL setelah klik Next:", page.url());
+  console.log("Judul halaman:", await page.title());
+  await page.screenshot({ path: "debug-setelah-klik-next.png" });
+
+  const passwordInput = page.locator('input[type="password"], input[name="Passwd"]').first();
+  await passwordInput.waitFor({ state: "visible" });
+  await passwordInput.fill(PASSWORD);
   await page.click("#passwordNext");
 
   await page.waitForLoadState("networkidle");
