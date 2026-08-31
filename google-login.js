@@ -29,6 +29,10 @@ async function main() {
   const page = await browser.newPage();
 
   await page.goto("https://accounts.google.com/signin/v2/identifier");
+  await page.waitForLoadState("domcontentloaded");
+  console.log("URL setelah load:", page.url());
+  console.log("Judul halaman:", await page.title());
+  await page.screenshot({ path: "debug-sebelum-isi-email.png" });
 
   await page.fill('input[type="email"]', EMAIL);
   await page.click("#identifierNext");
@@ -44,7 +48,7 @@ async function main() {
   await browser.close();
 }
 
-main().catch((err) => {
+main().catch(async (err) => {
   console.error("Gagal login:", err.message);
   process.exit(1);
 });
